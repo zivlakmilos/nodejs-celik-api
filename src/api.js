@@ -19,6 +19,8 @@ class CelikAPI {
   init = () => {
     const res = this.api.EidStartup(3);
     console.log(`EidStartup: ${res}`);
+
+    return res === 0;
   }
 
   cleanup = () => {
@@ -32,12 +34,22 @@ class CelikAPI {
     const res = this.api.EidBeginRead('', cardTypeBuf);
     console.log(`EidBeginRead: ${res}`);
 
+    if (res != 0) {
+      throw new Error(`Error code: ${res}`);
+    }
+
     const cardType = cardTypeBuf.deref()
     console.log(`    CardType: ${cardType}`);
 
     const documentData = this.readDocumentData();
+    const fixedPersonalData = this.readFixedPersonalData();
 
-    console.log(documentData);
+    const data = {
+      ...documentData,
+      ...fixedPersonalData,
+    }
+
+    return data;
   }
 
   readDocumentData = () => {
@@ -45,20 +57,47 @@ class CelikAPI {
     const res = this.api.EidReadDocumentData(documentData.ref());
     console.log(`EidReadDocumentData: ${res}`);
 
+    if (res != 0) {
+      throw new Error(`Error code: ${res}`);
+    }
+
     const data = {
-      docRegNo: documentData.docRegNo.toString(),
-      documentType: documentData.documentType.toString(),
-      issuingDate: documentData.issuingDate.toString(),
-      expiryDate: documentData.expiryDate.toString(),
-      issuingAuthority: documentData.issuingAuthority.toString(),
-      documentSerialNumber: documentData.documentSerialNumber.toString(),
-      chipSerialNumber: documentData.chipSerialNumber.toString(),
+      docRegNo: documentData.docRegNo.toString().replace(/\x00/g, ''),
+      documentType: documentData.documentType.toString().replace(/\x00/g, ''),
+      issuingDate: documentData.issuingDate.toString().replace(/\x00/g, ''),
+      expiryDate: documentData.expiryDate.toString().replace(/\x00/g, ''),
+      issuingAuthority: documentData.issuingAuthority.toString().replace(/\x00/g, ''),
+      documentSerialNumber: documentData.documentSerialNumber.toString().replace(/\x00/g, ''),
+      chipSerialNumber: documentData.chipSerialNumber.toString().replace(/\x00/g, ''),
     }
 
     return data;
   }
 
   readFixedPersonalData = () => {
+    const fixedPersonalData = new celik.types.EID_FIXED_PERSONAL_DATA();
+    const res = this.api.EidReadFixedPersonalData(fixedPersonalData.ref());
+    console.log(`EidReadFixedPersonalData: ${res}`);
+
+    if (res != 0) {
+      throw new Error(`Error code: ${res}`);
+    }
+
+    const data = {
+      personalNumber: fixedPersonalData.personalNumber.toString().replace(/\x00/g, ''),
+      surname: fixedPersonalData.surname.toString().replace(/\x00/g, ''),
+      givenName: fixedPersonalData.givenName.toString().replace(/\x00/g, ''),
+      parentGivenName: fixedPersonalData.parentGivenName.toString().replace(/\x00/g, ''),
+      sex: fixedPersonalData.sex.toString().replace(/\x00/g, ''),
+      placeOfBirth: fixedPersonalData.placeOfBirth.toString().replace(/\x00/g, ''),
+      stateOfBirth: fixedPersonalData.stateOfBirth.toString().replace(/\x00/g, ''),
+      dateOfBirth: fixedPersonalData.dateOfBirth.toString().replace(/\x00/g, ''),
+      communityOfBirth: fixedPersonalData.communityOfBirth.toString().replace(/\x00/g, ''),
+      statusOfForeigner: fixedPersonalData.stateOfBirth.toString().replace(/\x00/g, ''),
+      nationalityFull: fixedPersonalData.nationalityFull.toString().replace(/\x00/g, ''),
+    }
+
+    return data;
   }
 
   readVariablePersonalData = () => {

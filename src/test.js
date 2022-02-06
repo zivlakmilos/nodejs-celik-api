@@ -3,7 +3,8 @@ const { CelikAPI } = require('./api');
 const main = () => {
   const api = new CelikAPI();
   api.init();
-  api.read();
+  const data = api.read();
+  console.log(data);
   api.cleanup();
 }
 

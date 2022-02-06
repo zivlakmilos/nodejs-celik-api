@@ -32,6 +32,33 @@ const EID_DOCUMENT_DATA = StructType({
 
 const PEID_DOCUMENT_DATA = ref.refType(EID_DOCUMENT_DATA);
 
+const EID_FIXED_PERSONAL_DATA = StructType({
+	personalNumber: BufferType(constants.EID_MAX_PersonalNumber),
+	personalNumberSize: TYPE_INT,
+	surname: BufferType(constants.EID_MAX_Surname),
+	surnameSize: TYPE_INT,
+	givenName: BufferType(constants.EID_MAX_GivenName),
+	givenNameSize: TYPE_INT,
+	parentGivenName: BufferType(constants.EID_MAX_ParentGivenName),
+	parentGivenNameSize: TYPE_INT,
+	sex: BufferType(constants.EID_MAX_Sex),
+	sexSize: TYPE_INT,
+	placeOfBirth: BufferType(constants.EID_MAX_PlaceOfBirth),
+	placeOfBirthSize: TYPE_INT,
+	stateOfBirth: BufferType(constants.EID_MAX_StateOfBirth),
+	stateOfBirthSize: TYPE_INT,
+	dateOfBirth: BufferType(constants.EID_MAX_DateOfBirth),
+	dateOfBirthSize: TYPE_INT,
+	communityOfBirth: BufferType(constants.EID_MAX_CommunityOfBirth),
+	communityOfBirthSize: TYPE_INT,
+	statusOfForeigner: BufferType(constants.EID_MAX_StatusOfForeigner),
+	statusOfForeignerSize: TYPE_INT,
+	nationalityFull: BufferType(constants.EID_MAX_NationalityFull),
+	nationalityFullSize: TYPE_INT,
+});
+
+const PEID_FIXED_PERSONAL_DATA = ref.refType(EID_FIXED_PERSONAL_DATA);
+
 const loadCelik = (dllPath) => {
   const config = {
     EidStartup: [ TYPE_INT, [ TYPE_INT ] ],
@@ -40,7 +67,7 @@ const loadCelik = (dllPath) => {
     EidBeginRead: [ TYPE_INT, [ TYPE_LPCTSTR, TYPE_PINT ] ],
     EidEndRead: [ TYPE_INT, [ ] ],
     EidReadDocumentData: [ TYPE_INT, [ PEID_DOCUMENT_DATA ] ],
-    //EID_API int WINAPI EidReadDocumentData(PEID_DOCUMENT_DATA pData);
+    EidReadFixedPersonalData: [ TYPE_INT, [ PEID_FIXED_PERSONAL_DATA ] ],
     //EID_API int WINAPI EidReadFixedPersonalData(PEID_FIXED_PERSONAL_DATA pData);
     //EID_API int WINAPI EidReadVariablePersonalData(PEID_VARIABLE_PERSONAL_DATA pData);
     //EID_API int WINAPI EidReadPortrait(PEID_PORTRAIT pData);
@@ -51,8 +78,11 @@ const loadCelik = (dllPath) => {
 
 module.exports.load = loadCelik;
 module.exports.types = {
-  PEID_DOCUMENT_DATA,
-  EID_DOCUMENT_DATA,
   TYPE_INT,
   TYPE_PINT,
+
+  EID_DOCUMENT_DATA,
+  PEID_DOCUMENT_DATA,
+  EID_FIXED_PERSONAL_DATA,
+  PEID_FIXED_PERSONAL_DATA,
 }

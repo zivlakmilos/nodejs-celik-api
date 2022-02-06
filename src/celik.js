@@ -59,17 +59,42 @@ const EID_FIXED_PERSONAL_DATA = StructType({
 
 const PEID_FIXED_PERSONAL_DATA = ref.refType(EID_FIXED_PERSONAL_DATA);
 
+const EID_VARIABLE_PERSONAL_DATA = StructType({
+	state: BufferType(constants.EID_MAX_State),
+	stateSize: TYPE_INT,
+	community: BufferType(constants.EID_MAX_Community),
+	communitySize: TYPE_INT,
+	place: BufferType(constants.EID_MAX_Place),
+	placeSize: TYPE_INT,
+	street: BufferType(constants.EID_MAX_Street),
+	streetSize: TYPE_INT,
+	houseNumber: BufferType(constants.EID_MAX_HouseNumber),
+	houseNumberSize: TYPE_INT,
+	houseLetter: BufferType(constants.EID_MAX_HouseLetter),
+	houseLetterSize: TYPE_INT,
+	entrance: BufferType(constants.EID_MAX_Entrance),
+	entranceSize: TYPE_INT,
+	floor: BufferType(constants.EID_MAX_Floor),
+	floorSize: TYPE_INT,
+	apartmentNumber: BufferType(constants.EID_MAX_ApartmentNumber),
+	apartmentNumberSize: TYPE_INT,
+	addressDate: BufferType(constants.EID_MAX_AddressDate),
+	addressDateSize: TYPE_INT,
+	addressLabel: BufferType(constants.EID_MAX_AddressLabel),
+	addressLabelSize: TYPE_INT,
+});
+
+const PEID_VARIABLE_PERSONAL_DATA = ref.refType(EID_VARIABLE_PERSONAL_DATA);
+
 const loadCelik = (dllPath) => {
   const config = {
     EidStartup: [ TYPE_INT, [ TYPE_INT ] ],
     EidCleanup: [ TYPE_INT, [ ] ],
-    //EidBeginRead(LPCSTR szReader, int* pnCardType = 0);
     EidBeginRead: [ TYPE_INT, [ TYPE_LPCTSTR, TYPE_PINT ] ],
     EidEndRead: [ TYPE_INT, [ ] ],
     EidReadDocumentData: [ TYPE_INT, [ PEID_DOCUMENT_DATA ] ],
     EidReadFixedPersonalData: [ TYPE_INT, [ PEID_FIXED_PERSONAL_DATA ] ],
-    //EID_API int WINAPI EidReadFixedPersonalData(PEID_FIXED_PERSONAL_DATA pData);
-    //EID_API int WINAPI EidReadVariablePersonalData(PEID_VARIABLE_PERSONAL_DATA pData);
+    EidReadVariablePersonalData: [ TYPE_INT, [ PEID_VARIABLE_PERSONAL_DATA ] ],
     //EID_API int WINAPI EidReadPortrait(PEID_PORTRAIT pData);
   }
 
@@ -85,4 +110,6 @@ module.exports.types = {
   PEID_DOCUMENT_DATA,
   EID_FIXED_PERSONAL_DATA,
   PEID_FIXED_PERSONAL_DATA,
+  EID_VARIABLE_PERSONAL_DATA,
+  PEID_VARIABLE_PERSONAL_DATA,
 }

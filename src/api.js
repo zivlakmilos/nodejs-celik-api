@@ -43,10 +43,12 @@ class CelikAPI {
 
     const documentData = this.readDocumentData();
     const fixedPersonalData = this.readFixedPersonalData();
+    const variablePersonalData = this.readVariablePersonalData();
 
     const data = {
       ...documentData,
       ...fixedPersonalData,
+      ...variablePersonalData,
     }
 
     return data;
@@ -58,7 +60,7 @@ class CelikAPI {
     console.log(`EidReadDocumentData: ${res}`);
 
     if (res != 0) {
-      throw new Error(`Error code: ${res}`);
+      throw new Error(`[EidReadDocumentData] Error code: ${res}`);
     }
 
     const data = {
@@ -80,7 +82,7 @@ class CelikAPI {
     console.log(`EidReadFixedPersonalData: ${res}`);
 
     if (res != 0) {
-      throw new Error(`Error code: ${res}`);
+      throw new Error(`[EidReadFixedPersonalData] Error code: ${res}`);
     }
 
     const data = {
@@ -101,6 +103,30 @@ class CelikAPI {
   }
 
   readVariablePersonalData = () => {
+    const variablePersonalData = new celik.types.EID_VARIABLE_PERSONAL_DATA();
+    const res = this.api.EidReadVariablePersonalData(variablePersonalData.ref());
+    console.log(`EidReadVariablePersonalData: ${res}`);
+
+    if (res != 0) {
+      throw new Error(`[EidReadVariablePersonalData] Error code: ${res}`);
+    }
+
+    const data = {
+      state: variablePersonalData.state.toString().replace(/\x00/g, ''),
+      community: variablePersonalData.community.toString().replace(/\x00/g, ''),
+      place: variablePersonalData.place.toString().replace(/\x00/g, ''),
+      street: variablePersonalData.street.toString().replace(/\x00/g, ''),
+      houseNumber: variablePersonalData.houseNumber.toString().replace(/\x00/g, ''),
+      houseLetter: variablePersonalData.houseLetter.toString().replace(/\x00/g, ''),
+      entrance: variablePersonalData.entrance.toString().replace(/\x00/g, ''),
+      floor: variablePersonalData.floor.toString().replace(/\x00/g, ''),
+      apartmentNumber: variablePersonalData.apartmentNumber.toString().replace(/\x00/g, ''),
+      addressDate: variablePersonalData.addressDate.toString().replace(/\x00/g, ''),
+      addressLabel: variablePersonalData.addressLabel.toString().replace(/\x00/g, ''),
+    }
+
+    return data;
+
   }
 
   readPortrait = () => {

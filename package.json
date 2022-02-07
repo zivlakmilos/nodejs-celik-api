@@ -1,6 +1,6 @@
 {
-  "name": "nodejs-celik-api",
-  "version": "1.0.1",
+  "name": "node-celik-api",
+  "version": "1.0.2",
   "description": "NodeJS Čelik API (Serbian ID Card Reader)",
   "main": "src/api.js",
   "scripts": {

@@ -9,6 +9,7 @@ const BufferType = require('./BufferType');
 
 const TYPE_INT = ref.types.int;
 const TYPE_PINT = ref.refType(ref.types.int);
+const TYPE_BYTE = ref.types.byte;
 const TYPE_CHAR = ref.types.char;
 const TYPE_CSTRING = ref.types.CString;
 const TYPE_LPCTSTR = lpctstr;
@@ -86,6 +87,13 @@ const EID_VARIABLE_PERSONAL_DATA = StructType({
 
 const PEID_VARIABLE_PERSONAL_DATA = ref.refType(EID_VARIABLE_PERSONAL_DATA);
 
+const EID_PORTRAIT = StructType({
+	portrait: BufferType(constants.EID_MAX_Portrait),
+  portraitSize: TYPE_INT,
+});
+
+const PEID_PORTRAIT = ref.refType(EID_PORTRAIT);
+
 const loadCelik = (dllPath) => {
   const config = {
     EidStartup: [ TYPE_INT, [ TYPE_INT ] ],
@@ -95,7 +103,7 @@ const loadCelik = (dllPath) => {
     EidReadDocumentData: [ TYPE_INT, [ PEID_DOCUMENT_DATA ] ],
     EidReadFixedPersonalData: [ TYPE_INT, [ PEID_FIXED_PERSONAL_DATA ] ],
     EidReadVariablePersonalData: [ TYPE_INT, [ PEID_VARIABLE_PERSONAL_DATA ] ],
-    //EID_API int WINAPI EidReadPortrait(PEID_PORTRAIT pData);
+    EidReadPortrait: [ TYPE_INT, [ PEID_PORTRAIT ] ],
   }
 
   return ffi.Library(dllPath, config);
@@ -105,6 +113,7 @@ module.exports.load = loadCelik;
 module.exports.types = {
   TYPE_INT,
   TYPE_PINT,
+  TYPE_BYTE,
 
   EID_DOCUMENT_DATA,
   PEID_DOCUMENT_DATA,
@@ -112,4 +121,6 @@ module.exports.types = {
   PEID_FIXED_PERSONAL_DATA,
   EID_VARIABLE_PERSONAL_DATA,
   PEID_VARIABLE_PERSONAL_DATA,
+  EID_PORTRAIT,
+  PEID_PORTRAIT,
 }

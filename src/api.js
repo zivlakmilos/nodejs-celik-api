@@ -44,11 +44,13 @@ class CelikAPI {
     const documentData = this.readDocumentData();
     const fixedPersonalData = this.readFixedPersonalData();
     const variablePersonalData = this.readVariablePersonalData();
+    const portrait = this.readPortrait();
 
     const data = {
       ...documentData,
       ...fixedPersonalData,
       ...variablePersonalData,
+      ...portrait,
     }
 
     return data;
@@ -126,10 +128,25 @@ class CelikAPI {
     }
 
     return data;
-
   }
 
   readPortrait = () => {
+    const portrait = new celik.types.EID_PORTRAIT();
+    const res = this.api.EidReadPortrait(portrait.ref());
+    console.log(`EidReadPortrait: ${res}`);
+
+    if (res != 0) {
+      throw new Error(`[EidReadPortrait] Error code: ${res}`);
+    }
+
+    const img = Buffer.alloc(portrait.portraitSize);
+    portrait.portrait.copy(img, 0, 0, portrait.portraitSize);
+
+    const data = {
+      portrait: img,
+    }
+
+    return data;
   }
 }
 

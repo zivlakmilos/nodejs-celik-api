@@ -53,6 +53,13 @@ class CelikAPI {
       ...portrait,
     }
 
+    const endRead = this.api.EidEndRead();
+    console.log(`EidEndRead: ${endRead}`);
+
+    if (endRead != 0) {
+      throw new Error(`Error code: ${endRead}`);
+    }
+
     return data;
   }
 

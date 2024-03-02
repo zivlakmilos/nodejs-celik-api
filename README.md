@@ -1,4 +1,4 @@
-# nodejs-celik-api
+# node-celik-api
 
 NodeJS Wrapper for Čelik API (Serbian ID Card Reader)
 
@@ -17,7 +17,7 @@ NodeJS Wrapper for Čelik API (Serbian ID Card Reader)
 
 ## Instalation
 
-`npm install nodejs-celik-api`
+`npm install node-celik-api`
 
 ## Ussage
 
